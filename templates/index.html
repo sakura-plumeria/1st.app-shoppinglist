@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>お買い物リスト</title>
+</head>
+<body>
+    <h1>お買い物リスト</h1>
+
+    <form method="post">
+        <label for="item">品物：</label>
+        <input type="text" name="item" required>
+  
+        <label for="category">カテゴリ：</label>
+        <input type="text" name="category" placeholder="例: スーパー、ドラッグストアなど">
+  
+        <button type="submit">追加</button>
+    </form>
+
+{% for category, items in categorized_items.items() %}
+    <h2>{{ category }}</h2>
+    <ul>
+        {% for item in items %}
+            <li>
+                <div class="item">
+                    <span class="{% if item.purchased %}checked{% endif %}">
+                        {{ item.item }}
+                        <span class="date">（{{ item.added_at }}）</span>
+                    </span>
+                    <!-- ボタン類 -->
+                    <div>
+                        <form method="post" style="display:inline;">
+                            <input type="hidden" name="toggle" value="{{ item.index }}">
+                            <button type="submit">買ったよ</button>
+                        </form>
+        
+                        <form method="post" style="display:inline;">
+                            <input type="hidden" name="delete" value="{{ item.index }}">
+                            <button type="submit">削除</button>
+                        </form>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endfor %}
+</body>
+</html>
