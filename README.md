@@ -5,8 +5,8 @@
 * 買うものをメモ→カテゴリ別に見やすく管理→購入後にチェックできるお買い物アプリ。<br><br>
 **きっかけ**：普段のお買いもので買い忘れが発生していた。既存の使用しているアプリは分類での仕分けもできない。自分で好きな分類（食品・日用品ではなく、スーパー・ドラッグストアなど）を設定できれば、店内でチェックしやすく買い忘れ防止につながるのでは？と考えた。<br>
  **目的**：自分好みの分類にすることで、買い忘れゼロ・時間短縮を目指したい。<br>
- **特色**：データは LocalStorage に保存／カテゴリ別表示・購入チェック・削除・追加日時表示。<br>
- **技術**：Python、Flask、HTML/CSS、JavaScript（Vanilla）、LocalStorage(最小コストですぐ使える）を優先。DBへの拡張も今後していく予定<br>
+ **特色**：データは SQLite に保存／カテゴリ別表示・購入チェック・削除・追加日時表示。<br>
+ **技術**：Python、Flask、HTML/CSS、JavaScript（Vanilla）、SQLite<br>
  **デモ**：🔗（URL を後で入れる）<br>
 
 ---
@@ -26,7 +26,6 @@
 削除（1 件単位）<br>
 追加日時の表示（YYYY-MM-DD HH\:mm）<br>
 カテゴリごとにまとめて表示（見出し付き）<br>
-【予定】ローカル保存（LocalStorage）<br>
 
 ---
 
@@ -56,10 +55,8 @@ project/
 ├─ templates/
 │  └─ index.html          
 ├─ static/
-│  ├─ css/
-│  │  └─ style.css
-│  └─ js/
-│     ├─ storage.js       
-│     └─ ui.js            
+│  └─ css/
+│     └─ style.css
+│            
 └─ README.md
 ```
