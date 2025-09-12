@@ -2,48 +2,69 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>お買い物リスト</title>
 </head>
 <body>
     <h1>お買い物リスト</h1>
 
+    <!-- Undoバー（10秒） -->
+    {% if undo_available %}
+    <div class="undo-bar" id="undoBar"
+         data-item-id="{{ undo_item_id }}"
+         data-token="{{ undo_token }}"
+         data-remaining-ms="{{ undo_remaining_ms }}"
+         data-finalize-url="{{ url_for('finalize_purchase') }}">
+        「買ったよ」を取り消せます（10秒以内）
+        <form method="post" action="{{ url_for('undo') }}" style="display:inline;">
+            <input type="hidden" name="token" value="{{ undo_token }}">
+            <button type="submit" class="undo-btn">取り消す</button>
+        </form>
+    </div>
+    {% endif %}
+
     <form method="post">
         <label for="item">品物：</label>
         <input type="text" name="item" required>
-  
+
         <label for="category">カテゴリ：</label>
         <input type="text" name="category" placeholder="例: スーパー、ドラッグストアなど">
-  
+
         <button type="submit">追加</button>
     </form>
 
-{% for category, items in categorized_items.items() %}
-    <h2>{{ category }}</h2>
-    <ul>
-        {% for item in items %}
-            <li>
-                <div class="item">
-                    <span class="{% if item.purchased %}checked{% endif %}">
-                        {{ item.item }}
-                        <span class="date">（{{ item.added_at }}）</span>
-                    </span>
-                    <!-- ボタン類 -->
-                    <div>
-                        <form method="post" style="display:inline;">
-                            <input type="hidden" name="toggle" value="{{ item.index }}">
-                            <button type="submit">買ったよ</button>
-                        </form>
-        
-                        <form method="post" style="display:inline;">
-                            <input type="hidden" name="delete" value="{{ item.index }}">
-                            <button type="submit">削除</button>
-                        </form>
+    {% for category, items in categorized_items.items() %}
+        <h2>{{ category }}</h2>
+        <ul>
+            {% for item in items %}
+                <li id="item-{{ item.id }}">
+                    <div class="item">
+                        <span class="{% if item.purchased %}checked{% endif %}">
+                            {{ item.item }}
+                            <span class="date">（{{ item.added_at }}）</span>
+                        </span>
+                        <div>
+                            {% if not item.purchased %}
+                            <form method="post" style="display:inline;">
+                                <input type="hidden" name="buy" value="{{ item.id }}">
+                                <button type="submit">買ったよ</button>
+                            </form>
+                            {% else %}
+                            <span class="purchased-label">購入済み（10秒後に自動削除）</span>
+                            {% endif %}
+
+                            <form method="post" style="display:inline;">
+                                <input type="hidden" name="delete" value="{{ item.id }}">
+                                <button type="submit">削除</button>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            </li>
-        {% endfor %}
-    </ul>
-{% endfor %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+
+    <!-- 外部JSを読み込み -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>
