@@ -55,8 +55,7 @@ project/
 ├─ templates/
 │  └─ index.html          
 ├─ static/
-│  └─ css/
-│     └─ style.css
+│  └─ style.css
 │            
 └─ README.md
 ```
